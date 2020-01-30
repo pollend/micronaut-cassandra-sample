@@ -22,7 +22,7 @@ class PetController(@Inject val session: CqlSession){
 
     @Get("/{id}")
     fun get(@PathVariable id: Int): MutableHttpResponse<Pet> {
-        val result = session.execute(session.prepare("SELECT * from ks.pets WHERE id=?").bind(id))
+        val result = session.execute(session.prepare("SELECT * from ks.pets WHERE id= '?'").bind(id))
         try {
             val row = result.first()
             return HttpResponse.ok<Pet>(Pet(row.getInt("id"), row.getString("name").orEmpty()))
