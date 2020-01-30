@@ -22,7 +22,7 @@ configurations {
 
 dependencies {
 
-	implementation "io.micronaut.configuration:micronaut-cassandra:2.0.3.BUILD-SNAPSHOT"
+	implementation "io.micronaut.configuration:micronaut-cassandra:2.0.0.BUILD-SNAPSHOT"
 
 	implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
 	implementation "io.micronaut:micronaut-http-client"
