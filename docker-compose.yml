@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  db:
+    image: cassandra:3.11.5
+    ports:
+      - 9042:9042
+      - 7199:7199
+      - 7000:7000
+      - 7001:7001
+    environment:
+      - CASSANDRA_CLUSTER_NAME='K8Demo'
+  micronaut:
+    build: ./
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
