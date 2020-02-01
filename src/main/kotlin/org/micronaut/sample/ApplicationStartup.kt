@@ -15,29 +15,21 @@ import javax.inject.Singleton
 class ApplicationStartup(val session: CqlSession) : ApplicationEventListener<ServiceStartedEvent>{
     private val LOG: Logger = LoggerFactory.getLogger(ApplicationStartup::class.java)
     override fun onApplicationEvent(event: ServiceStartedEvent?) {
-        while (true) {
-            try {
-                session.execute("CREATE KEYSPACE IF NOT EXISTS ks WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};")
-                val results = session.execute("SELECT table_name FROM system_schema.tables WHERE keyspace_name='ks';")
-                var flag = false;
-                results.forEach {
-                    if (it.getString("table_name").equals("pets")) {
-                        flag = true;
-                    }
-                }
-                if (flag == false) {
-                    session.execute("CREATE TABLE IF NOT EXISTS ks.pets(id int PRIMARY KEY, name text)")
-                    session.execute("Insert into ks.pets(id,name) values (1,'husky')")
-                    session.execute("Insert into ks.pets(id,name) values (2,'labrador')")
-                    session.execute("Insert into ks.pets(id,name) values (3,'pomeranian')")
-                    session.execute("Insert into ks.pets(id,name) values (4,'pug')")
-                    session.execute("Insert into ks.pets(id,name) values (5,'poodle')")
-                }
-                break;
-            } catch (ex: AllNodesFailedException) {
-                LOG.error("Failed to create tables -- retrying in 5 seconds")
-                Thread.sleep(5000)
+        session.execute("CREATE KEYSPACE IF NOT EXISTS ks WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};")
+        val results = session.execute("SELECT table_name FROM system_schema.tables WHERE keyspace_name='ks';")
+        var flag = false;
+        results.forEach {
+            if (it.getString("table_name").equals("pets")) {
+                flag = true;
             }
+        }
+        if (flag == false) {
+            session.execute("CREATE TABLE IF NOT EXISTS ks.pets(id int PRIMARY KEY, name text)")
+            session.execute("Insert into ks.pets(id,name) values (1,'husky')")
+            session.execute("Insert into ks.pets(id,name) values (2,'labrador')")
+            session.execute("Insert into ks.pets(id,name) values (3,'pomeranian')")
+            session.execute("Insert into ks.pets(id,name) values (4,'pug')")
+            session.execute("Insert into ks.pets(id,name) values (5,'poodle')")
         }
     }
 }
